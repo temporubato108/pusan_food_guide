@@ -15,23 +15,11 @@ from streamlit_folium import folium_static
 import json
 import openai
 
-# OpenAI API 키 파일에서 읽기
-def load_api_key():
-    try:
-        key_path = r"C:\Users\wonho\Downloads\workspace\project\부산시_맛집_추천_시스템\secrets\openai_key.txt"
-        with open(key_path, 'r') as file:
-            api_key = file.read().strip()
-            # 환경 변수로 설정
-            os.environ["OPENAI_API_KEY"] = api_key
-            # openai.api_key 설정
-            openai.api_key = api_key
-            return api_key
-    except Exception as e:
-        st.error(f"API 키를 불러오는 데 실패했습니다: {str(e)}")
-        return None
+# st.secrets로 API 키 불러오기
+api_key = st.secrets["OPENAI_API_KEY"]
 
-# API 키 설정
-api_key = load_api_key()
+# API 키를 이용해 OpenAI API 호출하기
+openai.api_key = api_key
 
 def get_chatbot_response(user_input, restaurant_data):
     if not api_key:
